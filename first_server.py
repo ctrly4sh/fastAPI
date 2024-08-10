@@ -1,6 +1,12 @@
 from fastapi import FastAPI
+from enum import Enum
 
 app = FastAPI()
+
+class ModelName(str , Enum):
+    llama = "Llama"
+    GptOmni = "gpt-4O"
+
 
 @app.get('/')
 async def root(): 
@@ -10,7 +16,7 @@ async def root():
 
 @app.get('/home')
 async def home():
-    return {
+    return {    
         "String": "home endpoint"
     }
 
@@ -38,3 +44,16 @@ async def read_user(user_id : str):
 @app.get('/twovalues')
 async def val():
     return ["Ooga" , "booga"]
+
+@app.get('/models/{models_name}')
+async def models(models_name : ModelName):
+    if models_name is ModelName.GptOmni:
+        return {
+            "model name" : models_name,
+            "message" : "chat gpt o" 
+        }
+    if models_name is ModelName.llama:
+        return {
+            "model name" : models_name,
+            "message" : "facebook model"
+        }
